@@ -1,8 +1,11 @@
+// 用户自定义 worker
+
 function onMessage (e) {
   const data = e.data;
+  const { action } = data;
 
   self.postMessage({
-    action: 'did filter',
+    action,
     payload: {
       data
     }
