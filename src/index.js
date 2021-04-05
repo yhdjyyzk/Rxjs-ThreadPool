@@ -1,12 +1,12 @@
 import * as Rx from 'rxjs';
 import { bufferCount, filter } from 'rxjs/operators';
 import ThreadPool from '../lib/index';
-import DecodeWorker from './decode.worker';
 // import './decode';
+import DecodeWorker from './decode.worker';
 
 const pool = new ThreadPool({
   threadCtor: DecodeWorker,
-  maxThreadsNumber: 2
+  maxThreadsNumber: 4
 });
 
 // --------------------- decode tile --------------
@@ -22,8 +22,8 @@ workerObservableDecode$.pipe(
 
     for (let i = 0; i < value.length; i++) {
       const { payload, timestamp } = value[i].data;
+      // console.log(payload.data);
       timestamps.push(timestamp);
-      console.log(payload.data);
     }
 
     console.log(Date.now() - Math.max(...timestamps));

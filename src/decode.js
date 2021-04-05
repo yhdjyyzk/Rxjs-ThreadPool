@@ -15,14 +15,14 @@ function getTileBuffer (x, y, z) {
   });
 }
 
-function decode (arrayBuffer) {
+function decode (arrayBuffer, x, y, z) {
   const tile = new VectorTile(new Pbf(arrayBuffer));
 
   const features = [];
 
   for (const layerName in tile.layers) {
     for (let i = 0; i < tile.layers[layerName].length; i++) {
-      features.push(tile.layers[layerName].feature(i).toGeoJSON());
+      features.push(tile.layers[layerName].feature(i).toGeoJSON(x, y, z));
     }
   }
 
@@ -33,18 +33,16 @@ function decode (arrayBuffer) {
 
 async function benchmark () {
   const start = Date.now();
-  // console.time('start');
   let count = 0;
 
   for (let x = 26983; x < 26985; x++) {
     for (let y = 12416; y < 12418; y++) {
       getTileBuffer(x, y, 15).then(buffer => {
-        const ret = decode(buffer);
-        console.log(ret);
+        const ret = decode(buffer, x, y, 15);
+        // console.log(ret);
         count++;
 
         if (count === 4) {
-          // console.timeEnd('start');
           console.log(Date.now() - start);
         }
       });
